@@ -22,15 +22,25 @@
     </div>
   </header>
 
-  <main class="container chat-layout">
-    <aside class="chat-side-panel">
-      <div class="panel-head">
-        <h2>チャット部屋</h2>
-        <button id="addRoomBtn" class="small-btn">＋</button>
-      </div>
+  <aside class="chat-side-panel">
+  <div class="panel-head">
+    <h2>フォルダ</h2>
+    <button id="addChatFolderBtn" class="small-btn">＋</button>
+  </div>
 
-      <div id="chatRoomList" class="chat-room-list"></div>
-    </aside>
+  <div id="chatFolderList" class="chat-room-list"></div>
+
+  <div class="panel-head chat-room-title-row">
+    <h2>チャット部屋</h2>
+    <button id="addRoomBtn" class="small-btn">＋</button>
+  </div>
+
+  <select id="roomFolderSelect" class="room-folder-select">
+    <option value="">フォルダなし</option>
+  </select>
+
+  <div id="chatRoomList" class="chat-room-list"></div>
+</aside>
 
     <section class="chat-main-panel">
       <div class="chat-room-head">
