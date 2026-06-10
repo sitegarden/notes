@@ -871,7 +871,7 @@ button {
 .chat-message {
   display: flex;
   gap: 8px;
-  align-items: flex-end;
+  align-items: flex-start;
   max-width: 78%;
 }
 
@@ -989,4 +989,7 @@ button {
 
 .chat-message.right .chat-speaker-name {
   color: #566b4e;
+}
+.chat-avatar {
+  margin-top: 18px;
 }
