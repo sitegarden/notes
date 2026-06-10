@@ -467,26 +467,46 @@ function renderMessages() {
     name.textContent = speaker?.name || "不明";
 
     const bubble = document.createElement("div");
-    bubble.className = "chat-bubble";
-    bubble.textContent = message.text || "";
+bubble.className = "chat-bubble";
+bubble.textContent = message.text || "";
 
-    bubble.addEventListener("click", async () => {
+wrap.appendChild(name);
+wrap.appendChild(bubble);
+
+const actions = document.createElement("div");
+actions.className = "chat-message-actions";
+
+const menuBtn = document.createElement("button");
+menuBtn.className = "chat-menu-btn";
+menuBtn.textContent = "…";
+
+const menu = document.createElement("div");
+menu.className = "chat-action-menu hidden";
+
+const editBtn = document.createElement("button");
+editBtn.textContent = "編集";
+editBtn.addEventListener("click", async () => {
+  menu.classList.add("hidden");
   await editMessage(message);
 });
 
-    wrap.appendChild(name);
-    wrap.appendChild(bubble);
-
-    const actions = document.createElement("div");
-actions.className = "chat-message-actions";
-
 const deleteBtn = document.createElement("button");
 deleteBtn.textContent = "削除";
+deleteBtn.className = "danger-menu-btn";
 deleteBtn.addEventListener("click", async () => {
+  menu.classList.add("hidden");
   await deleteMessage(message.id);
 });
 
-actions.appendChild(deleteBtn);
+menuBtn.addEventListener("click", () => {
+  menu.classList.toggle("hidden");
+});
+
+menu.appendChild(editBtn);
+menu.appendChild(deleteBtn);
+
+actions.appendChild(menuBtn);
+actions.appendChild(menu);
 wrap.appendChild(actions);
 
     messageEl.appendChild(avatar);
@@ -538,25 +558,65 @@ function renderRoomEmpty() {
 async function editMessage(message) {
   if (!currentUser) return;
 
-  const newText = prompt("吹き出しを編集", message.text || "");
+  const oldText = message.text || "";
 
-  if (newText === null) return;
+  const overlay = document.createElement("div");
+  overlay.className = "edit-overlay";
 
-  if (!newText.trim()) {
-    alert("空にはできません");
-    return;
-  }
+  const box = document.createElement("div");
+  box.className = "edit-box";
 
-  try {
-    await updateDoc(doc(db, "chatMessages", message.id), {
-      text: newText.trim()
-    });
+  const title = document.createElement("h3");
+  title.textContent = "吹き出しを編集";
 
-    await loadMessages();
-  } catch (error) {
-    console.error(error);
-    alert("吹き出しの編集に失敗しました");
-  }
+  const textarea = document.createElement("textarea");
+  textarea.value = oldText;
+
+  const actions = document.createElement("div");
+  actions.className = "edit-box-actions";
+
+  const cancelBtn = document.createElement("button");
+  cancelBtn.textContent = "キャンセル";
+
+  const saveBtn = document.createElement("button");
+  saveBtn.textContent = "保存";
+
+  cancelBtn.addEventListener("click", () => {
+    overlay.remove();
+  });
+
+  saveBtn.addEventListener("click", async () => {
+    const newText = textarea.value.trim();
+
+    if (!newText) {
+      alert("空にはできません");
+      return;
+    }
+
+    try {
+      await updateDoc(doc(db, "chatMessages", message.id), {
+        text: newText
+      });
+
+      overlay.remove();
+      await loadMessages();
+    } catch (error) {
+      console.error(error);
+      alert("吹き出しの編集に失敗しました");
+    }
+  });
+
+  actions.appendChild(cancelBtn);
+  actions.appendChild(saveBtn);
+
+  box.appendChild(title);
+  box.appendChild(textarea);
+  box.appendChild(actions);
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  textarea.focus();
 }
 
 async function deleteMessage(messageId) {
