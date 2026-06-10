@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>夢日記 | Zero Notes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dream-page">
+  <header class="site-header dream-header">
+    <div>
+      <p class="label">DREAM DIARY</p>
+      <h1>夢日記</h1>
+      <p class="lead">見た夢を、夜っぽいカレンダーでそっと残す記録帳。</p>
+    </div>
+
+    <div class="auth-area">
+      <a href="index.html" class="back-link">トップへ戻る</a>
+      <button id="loginBtn">Googleでログイン</button>
+      <button id="logoutBtn" class="hidden">ログアウト</button>
+      <p id="userInfo" class="user-info"></p>
+    </div>
+  </header>
+
+  <main class="container diary-layout">
+    <section class="diary-calendar-panel dream-panel">
+      <div class="diary-month-head">
+        <button id="prevMonthBtn">‹</button>
+        <h2 id="monthTitle">----</h2>
+        <button id="nextMonthBtn">›</button>
+      </div>
+
+      <div class="week-row">
+        <span>日</span>
+        <span>月</span>
+        <span>火</span>
+        <span>水</span>
+        <span>木</span>
+        <span>金</span>
+        <span>土</span>
+      </div>
+
+      <div id="calendarGrid" class="calendar-grid dream-calendar"></div>
+    </section>
+
+    <section class="diary-editor-panel dream-panel">
+      <div class="diary-editor-head">
+        <div>
+          <p class="label">SELECTED DREAM</p>
+          <h2 id="selectedDateTitle">日付を選択</h2>
+        </div>
+
+        <select id="dreamMoodSelect">
+          <option value="mystery">🌙 不思議</option>
+          <option value="beautiful">🦋 綺麗</option>
+          <option value="vague">🌫️ 曖昧</option>
+          <option value="scary">🔥 怖い</option>
+          <option value="strong">💎 印象的</option>
+          <option value="quiet">🕯️ 静か</option>
+        </select>
+      </div>
+
+      <textarea
+        id="dreamBody"
+        placeholder="見た夢を書く"
+      ></textarea>
+
+      <div class="editor-actions">
+        <p id="dreamStatus">ログインしてください</p>
+        <button id="deleteDreamBtn" class="danger-btn">削除</button>
+        <button id="saveDreamBtn">保存</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="dream.js"></script>
+</body>
+</html>
