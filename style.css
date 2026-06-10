@@ -974,3 +974,19 @@ button {
     max-width: 92%;
   }
 }
+
+
+.chat-message.right .chat-bubble {
+  background: #e8f3e3;
+  color: #2c2823;
+  border: 1px solid #c9ddc0;
+}
+
+.chat-message.right .chat-avatar {
+  background: #e8f3e3;
+  border-color: #c9ddc0;
+}
+
+.chat-message.right .chat-speaker-name {
+  color: #566b4e;
+}
