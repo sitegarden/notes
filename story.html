@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ストーリー置き場 | Zero Notes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="story-page">
+  <header class="site-header story-header">
+    <div>
+      <p class="label">STORY ARCHIVE</p>
+      <h1>ストーリー置き場</h1>
+      <p class="lead">作品ごとに、1話・2話・番外編をまとめて保管する長文置き場。</p>
+    </div>
+
+    <div class="auth-area">
+      <a href="index.html" class="back-link">トップへ戻る</a>
+      <button id="loginBtn">Googleでログイン</button>
+      <button id="logoutBtn" class="hidden">ログアウト</button>
+      <p id="userInfo" class="user-info"></p>
+    </div>
+  </header>
+
+  <main class="container story-layout">
+    <aside class="story-work-panel">
+      <div class="panel-head">
+        <h2>作品</h2>
+        <button id="addWorkBtn" class="small-btn">＋</button>
+      </div>
+
+      <div id="workList" class="story-list"></div>
+    </aside>
+
+    <aside class="story-episode-panel">
+      <div class="panel-head">
+        <h2>話一覧</h2>
+        <button id="addEpisodeBtn" class="small-btn">＋</button>
+      </div>
+
+      <p id="selectedWorkInfo" class="story-subtext">作品を選択してください</p>
+      <div id="episodeList" class="story-list"></div>
+    </aside>
+
+    <section class="story-editor-panel">
+      <div class="story-editor-head">
+        <div>
+          <p class="label">EPISODE EDITOR</p>
+          <h2 id="storyEditorTitle">話を選択</h2>
+        </div>
+      </div>
+
+      <input
+        type="number"
+        id="episodeOrderInput"
+        placeholder="話数・並び順"
+        min="0"
+      />
+
+      <input
+        type="text"
+        id="episodeTitleInput"
+        placeholder="タイトル"
+      />
+
+      <textarea
+        id="episodeBodyInput"
+        placeholder="本文を書く"
+      ></textarea>
+
+      <div class="editor-actions">
+        <p id="storyStatus">ログインしてください</p>
+        <button id="newEpisodeBtn" type="button">新規</button>
+        <button id="deleteEpisodeBtn" class="danger-btn" type="button">削除</button>
+        <button id="saveEpisodeBtn" type="button">保存</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="story.js"></script>
+</body>
+</html>
