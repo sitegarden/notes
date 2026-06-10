@@ -1496,3 +1496,14 @@ button {
     min-height: 340px;
   }
 }
+
+
+.diary-month-head {
+  display: grid;
+  grid-template-columns: 38px 38px 1fr 38px 38px;
+  align-items: center;
+}
+
+.diary-month-head h2 {
+  text-align: center;
+}
