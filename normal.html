@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>通常メモ | Zero Notes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="label">NORMAL MEMO</p>
+      <h1>通常メモ</h1>
+      <p class="lead">Markdown風に書いて、階層フォルダで整理するメモ。</p>
+    </div>
+
+    <div class="auth-area">
+      <a href="index.html" class="back-link">トップへ戻る</a>
+      <button id="loginBtn">Googleでログイン</button>
+      <button id="logoutBtn" class="hidden">ログアウト</button>
+      <p id="userInfo" class="user-info"></p>
+    </div>
+  </header>
+
+  <main class="container normal-layout">
+    <aside class="folder-panel">
+      <div class="panel-head">
+        <h2>フォルダ</h2>
+        <button id="addFolderBtn" class="small-btn">＋</button>
+      </div>
+
+      <div class="folder-actions">
+        <button id="addChildFolderBtn" class="folder-action-btn">子フォルダ追加</button>
+      </div>
+
+      <div id="normalFolderList" class="folder-list">
+        <button class="folder-item active" data-folder="all">すべて</button>
+      </div>
+    </aside>
+
+    <section class="memo-panel">
+      <div class="memo-toolbar normal-toolbar">
+        <input
+          type="text"
+          id="normalSearchInput"
+          placeholder="メモを検索"
+        />
+
+        <select id="normalFolderSelect">
+          <option value="">フォルダなし</option>
+        </select>
+
+        <button id="newNormalMemoBtn">新規メモ</button>
+      </div>
+
+      <div class="memo-body normal-body">
+        <div class="memo-list-wrap">
+          <h2>メモ一覧</h2>
+          <div id="normalMemoList" class="memo-list"></div>
+        </div>
+
+        <div class="normal-editor-wrap">
+          <input
+            type="text"
+            id="normalTitleInput"
+            class="title-input"
+            placeholder="タイトル"
+          />
+
+          <div class="view-tabs">
+            <button id="editModeBtn" class="tab-btn active">編集</button>
+            <button id="previewModeBtn" class="tab-btn">プレビュー</button>
+          </div>
+
+          <textarea
+            id="normalBodyEditor"
+            placeholder="# 見出し&#10;&#10;本文を書く&#10;&#10;- 箇条書き&#10;- メモ&#10;&#10;> 引用っぽい表示&#10;&#10;- [ ] チェック"
+          ></textarea>
+
+          <div id="normalPreview" class="markdown-preview hidden"></div>
+
+          <div class="editor-actions">
+            <p id="normalSaveStatus">未保存</p>
+            <button id="deleteNormalMemoBtn" class="danger-btn">削除</button>
+            <button id="saveNormalMemoBtn">保存</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="normal.js"></script>
+</body>
+</html>
