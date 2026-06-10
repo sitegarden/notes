@@ -1700,3 +1700,150 @@ button {
     height: 46px;
   }
 }
+
+/* story archive */
+
+.story-page {
+  background:
+    radial-gradient(circle at top left, rgba(185, 140, 90, 0.16), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(92, 68, 48, 0.14), transparent 34%),
+    #f3eee5;
+  color: #2d2620;
+}
+
+.story-header {
+  background:
+    radial-gradient(circle at top right, rgba(232, 192, 142, 0.18), transparent 32%),
+    #30261f;
+  color: #fffaf3;
+}
+
+.story-header .lead,
+.story-header .user-info {
+  color: #e5d4c0;
+}
+
+.story-header .auth-area button,
+.story-header .back-link {
+  background: #fffaf3;
+  color: #30261f;
+}
+
+.story-layout {
+  display: grid;
+  grid-template-columns: 230px 260px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.story-work-panel,
+.story-episode-panel,
+.story-editor-panel {
+  background: rgba(255, 250, 243, 0.94);
+  border: 1px solid #e2d1bd;
+  border-radius: 22px;
+  box-shadow: 0 14px 34px rgba(49, 36, 24, 0.09);
+}
+
+.story-work-panel,
+.story-episode-panel {
+  padding: 18px;
+}
+
+.story-editor-panel {
+  padding: 18px;
+  min-width: 0;
+}
+
+.story-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.story-item {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 14px;
+  background: #f2e8dc;
+  color: #4d3f34;
+  text-align: left;
+}
+
+.story-item.active {
+  background: #30261f;
+  color: #fffaf3;
+}
+
+.story-item-title {
+  margin: 0;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
+.story-item-sub {
+  margin: 5px 0 0;
+  color: #7d6d5e;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.story-item.active .story-item-sub {
+  color: #e5d4c0;
+}
+
+.story-subtext {
+  margin: 10px 0 0;
+  color: #8a7d70;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.story-editor-head {
+  margin-bottom: 14px;
+}
+
+.story-editor-head h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.story-editor-panel input,
+.story-editor-panel textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d8c7b3;
+  border-radius: 14px;
+  background: #fff;
+  color: #2d2620;
+}
+
+.story-editor-panel input + input,
+.story-editor-panel input + textarea {
+  margin-top: 10px;
+}
+
+#episodeBodyInput {
+  min-height: 520px;
+  resize: vertical;
+  line-height: 1.9;
+}
+
+.story-page .editor-actions button:last-child {
+  background: #30261f;
+  color: #fffaf3;
+}
+
+.story-page .danger-btn {
+  background: #8b3a35 !important;
+}
+
+@media (max-width: 1000px) {
+  .story-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #episodeBodyInput {
+    min-height: 380px;
+  }
+}
