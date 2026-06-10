@@ -40,6 +40,9 @@ const diaryStatus = document.getElementById("diaryStatus");
 const saveDiaryBtn = document.getElementById("saveDiaryBtn");
 const deleteDiaryBtn = document.getElementById("deleteDiaryBtn");
 
+const prevYearBtn = document.getElementById("prevYearBtn");
+const nextYearBtn = document.getElementById("nextYearBtn");
+
 let currentUser = null;
 let diaries = [];
 let selectedDate = toDateText(new Date());
@@ -115,6 +118,16 @@ nextMonthBtn.addEventListener("click", () => {
     viewYear++;
   }
 
+  renderCalendar();
+});
+
+prevYearBtn.addEventListener("click", () => {
+  viewYear--;
+  renderCalendar();
+});
+
+nextYearBtn.addEventListener("click", () => {
+  viewYear++;
   renderCalendar();
 });
 
