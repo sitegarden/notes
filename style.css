@@ -1209,3 +1209,23 @@ button {
   background: #fff;
   color: #2c2823;
 }
+
+.chat-title-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.room-edit-btn {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #efe3d4;
+  color: #4b4037;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.room-edit-btn:hover {
+  background: #2f2924;
+  color: #fffaf3;
+}
