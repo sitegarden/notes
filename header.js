@@ -5,9 +5,21 @@ const headerRoot = document.getElementById("commonHeader");
 if (headerRoot) {
   headerRoot.innerHTML = `
     <header class="common-header">
-      <a href="/" class="common-logo">notia</a>
+      <div class="common-header-top">
+        <a href="/" class="common-logo">notia</a>
 
-      <nav class="common-nav">
+        <button
+          id="menuToggleBtn"
+          class="menu-toggle-btn"
+          type="button"
+          aria-label="メニューを開く"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+      </div>
+
+      <nav id="commonNav" class="common-nav">
         <a href="/">トップ</a>
         <a href="/home/">Home</a>
         <a href="/quick/">クイック</a>
@@ -19,4 +31,18 @@ if (headerRoot) {
       </nav>
     </header>
   `;
+
+  const menuToggleBtn = document.getElementById("menuToggleBtn");
+  const commonNav = document.getElementById("commonNav");
+
+  menuToggleBtn.addEventListener("click", () => {
+    const isOpen = commonNav.classList.toggle("open");
+
+    menuToggleBtn.textContent = isOpen ? "×" : "☰";
+    menuToggleBtn.setAttribute("aria-expanded", String(isOpen));
+    menuToggleBtn.setAttribute(
+      "aria-label",
+      isOpen ? "メニューを閉じる" : "メニューを開く"
+    );
+  });
 }
