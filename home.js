@@ -33,6 +33,8 @@ const recentTimeline = document.getElementById("recentTimeline");
 
 const quickMemoList = document.getElementById("quickMemoList");
 const taskList = document.getElementById("taskList");
+const sharedMemoList = document.getElementById("sharedMemoList");
+
 const normalMemoList = document.getElementById("normalMemoList");
 const diaryList = document.getElementById("diaryList");
 const dreamList = document.getElementById("dreamList");
@@ -76,16 +78,23 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) {
     userName.textContent = "未ログイン";
     userStatus.textContent = "Googleでログインすると、最近のメモを表示できます。";
+
     loginBtn.classList.remove("hidden");
     logoutBtn.classList.add("hidden");
     homeContent.classList.add("hidden");
+
+    document.querySelectorAll(".admin-only").forEach((element) => {
+      element.classList.add("hidden");
+    });
+
+    clearAllLists();
     return;
   }
 
-  userName.textContent = user.displayName || "ログイン中";
+  userName.textContent = user.displayName || user.email || "ログイン中";
   userStatus.textContent = isCurrentAdmin
     ? "管理人モードで表示中です。"
-    : "クイックメモとタスクを表示中です。";
+    : "クイックメモ・タスク・共有メモを表示中です。";
 
   loginBtn.classList.add("hidden");
   logoutBtn.classList.remove("hidden");
@@ -106,12 +115,13 @@ async function loadHome() {
   try {
     const sections = [];
 
-    const quickMemos = await fetchUserCollection("quickMemos");
+    const quickMemos = await fetchUserCollection("quickMemos", "uid");
+
     sections.push({
-  type: "quick",
-  label: "クイックメモ",
-  url: "/quick/",
-  items: quickMemos.map((item) => ({
+      type: "quick",
+      label: "クイックメモ",
+      url: "/quick/",
+      items: quickMemos.map((item) => ({
         ...item,
         displayTitle: getQuickMemoTitle(item),
         displayText: item.body || "",
@@ -119,11 +129,12 @@ async function loadHome() {
       }))
     });
 
-    const tasks = await fetchUserCollection("tasks");
+    const tasks = await fetchUserCollection("tasks", "uid");
+
     sections.push({
       type: "task",
       label: "タスク",
-      url: "task.html",
+      url: "/task/",
       items: tasks.map((item) => ({
         ...item,
         displayTitle: item.title || "無題のタスク",
@@ -132,12 +143,27 @@ async function loadHome() {
       }))
     });
 
+    const sharedMemos = await fetchUserCollection("sharedMemos", "ownerUid");
+
+    sections.push({
+      type: "shared",
+      label: "共有メモ",
+      url: "/shared/",
+      items: sharedMemos.map((item) => ({
+        ...item,
+        displayTitle: item.title || "無題の共有メモ",
+        displayText: item.body || "",
+        displayDate: getDisplayDate(item)
+      }))
+    });
+
     if (isCurrentAdmin) {
-      const normalMemos = await fetchUserCollection("normalMemos");
+      const normalMemos = await fetchUserCollection("normalMemos", "uid");
+
       sections.push({
         type: "normal",
         label: "通常メモ",
-        url: "normal.html",
+        url: "/normal/",
         items: normalMemos.map((item) => ({
           ...item,
           displayTitle: item.title || "無題のメモ",
@@ -146,37 +172,42 @@ async function loadHome() {
         }))
       });
 
-      const diaries = await fetchUserCollection("diaries");
+      const diaries = await fetchUserCollection("diaries", "uid");
+
       sections.push({
         type: "diary",
         label: "日記",
-        url: "diary.html",
+        url: "/diary/",
         items: diaries.map((item) => ({
           ...item,
           displayTitle: item.date ? `${item.date} の日記` : "日記",
           displayText: item.body || item.mood || "",
-          displayDate: item.date || getDisplayDate(item)
+          displayDate: item.date || getDisplayDate(item),
+          sortDate: item.updatedAt || item.createdAt
         }))
       });
 
-      const dreams = await fetchUserCollection("dreamDiaries");
+      const dreams = await fetchUserCollection("dreamDiaries", "uid");
+
       sections.push({
         type: "dream",
         label: "夢日記",
-        url: "dream.html",
+        url: "/dream/",
         items: dreams.map((item) => ({
           ...item,
           displayTitle: item.date ? `${item.date} の夢` : "夢日記",
           displayText: item.body || item.mood || "",
-          displayDate: item.date || getDisplayDate(item)
+          displayDate: item.date || getDisplayDate(item),
+          sortDate: item.updatedAt || item.createdAt
         }))
       });
 
-      const musicMemos = await fetchUserCollection("musicMemos");
+      const musicMemos = await fetchUserCollection("musicMemos", "uid");
+
       sections.push({
         type: "music",
         label: "曲メモ",
-        url: "music.html",
+        url: "/music/",
         items: musicMemos.map((item) => ({
           ...item,
           displayTitle: item.title || "無題の曲",
@@ -185,11 +216,12 @@ async function loadHome() {
         }))
       });
 
-      const storyWorks = await fetchUserCollection("storyWorks");
+      const storyWorks = await fetchUserCollection("storyWorks", "uid");
+
       sections.push({
         type: "story",
         label: "ストーリー",
-        url: "story.html",
+        url: "/story/",
         items: storyWorks.map((item) => ({
           ...item,
           displayTitle: item.title || "無題の作品",
@@ -198,11 +230,12 @@ async function loadHome() {
         }))
       });
 
-      const people = await fetchUserCollection("people");
+      const people = await fetchUserCollection("people", "uid");
+
       sections.push({
         type: "people",
         label: "人物帳",
-        url: "people.html",
+        url: "/people/",
         items: people.map((item) => ({
           ...item,
           displayTitle: item.name || "名前なし",
@@ -216,23 +249,58 @@ async function loadHome() {
       section.items.sort(compareByDateDesc);
     });
 
-    renderSection(quickMemoList, sections.find((s) => s.type === "quick"));
-    renderSection(taskList, sections.find((s) => s.type === "task"));
+    renderSection(
+      quickMemoList,
+      sections.find((section) => section.type === "quick")
+    );
+
+    renderSection(
+      taskList,
+      sections.find((section) => section.type === "task")
+    );
+
+    renderSection(
+      sharedMemoList,
+      sections.find((section) => section.type === "shared")
+    );
 
     if (isCurrentAdmin) {
-      renderSection(normalMemoList, sections.find((s) => s.type === "normal"));
-      renderSection(diaryList, sections.find((s) => s.type === "diary"));
-      renderSection(dreamList, sections.find((s) => s.type === "dream"));
-      renderSection(musicList, sections.find((s) => s.type === "music"));
-      renderSection(storyList, sections.find((s) => s.type === "story"));
-      renderSection(peopleList, sections.find((s) => s.type === "people"));
+      renderSection(
+        normalMemoList,
+        sections.find((section) => section.type === "normal")
+      );
+
+      renderSection(
+        diaryList,
+        sections.find((section) => section.type === "diary")
+      );
+
+      renderSection(
+        dreamList,
+        sections.find((section) => section.type === "dream")
+      );
+
+      renderSection(
+        musicList,
+        sections.find((section) => section.type === "music")
+      );
+
+      renderSection(
+        storyList,
+        sections.find((section) => section.type === "story")
+      );
+
+      renderSection(
+        peopleList,
+        sections.find((section) => section.type === "people")
+      );
     }
 
     renderTimeline(sections);
 
     userStatus.textContent = isCurrentAdmin
       ? "すべての最近の記録を表示しています。"
-      : "最近のクイックメモとタスクを表示しています。";
+      : "最近のクイックメモ・タスク・共有メモを表示しています。";
   } catch (error) {
     console.error(error);
     userStatus.textContent = "読み込みに失敗しました。";
@@ -240,24 +308,27 @@ async function loadHome() {
   }
 }
 
-async function fetchUserCollection(collectionName) {
+async function fetchUserCollection(collectionName, ownerField) {
   const q = query(
     collection(db, collectionName),
-    where("uid", "==", currentUser.uid)
+    where(ownerField, "==", currentUser.uid)
   );
 
   const snapshot = await getDocs(q);
 
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data()
+  return snapshot.docs.map((document) => ({
+    id: document.id,
+    ...document.data()
   }));
 }
 
 function clearAllLists() {
   recentTimeline.innerHTML = "";
+
   quickMemoList.innerHTML = "";
   taskList.innerHTML = "";
+  sharedMemoList.innerHTML = "";
+
   normalMemoList.innerHTML = "";
   diaryList.innerHTML = "";
   dreamList.innerHTML = "";
@@ -310,6 +381,7 @@ function renderTimeline(sections) {
     }
 
     card.appendChild(date);
+
     recentTimeline.appendChild(card);
   });
 }
@@ -352,7 +424,9 @@ function renderSection(container, section) {
 
 function getQuickMemoTitle(item) {
   const body = item.body || "";
-  const firstLine = body.split("\n").find((line) => line.trim());
+  const firstLine = body
+    .split("\n")
+    .find((line) => line.trim());
 
   return firstLine ? firstLine.trim() : "無題のメモ";
 }
@@ -374,7 +448,7 @@ function getDisplayDate(item) {
 }
 
 function getSortTime(item) {
-  const date = item.updatedAt || item.createdAt;
+  const date = item.sortDate || item.updatedAt || item.createdAt;
 
   if (!date) return 0;
 
