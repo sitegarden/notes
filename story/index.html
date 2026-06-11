@@ -3,9 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ストーリー置き場 | Zero Notes</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <title>ストーリー置き場 | notia</title>
+
+  <meta
+    name="description"
+    content="作品ごとに、1話・2話・番外編などをまとめて保管できるnotiaのストーリー置き場です。"
+  />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
 </head>
+
 <body class="story-page">
   <header class="site-header story-header">
     <div>
@@ -15,7 +25,7 @@
     </div>
 
     <div class="auth-area">
-      <a href="index.html" class="back-link">トップへ戻る</a>
+      <a href="/home/" class="back-link">Homeへ</a>
       <button id="loginBtn">Googleでログイン</button>
       <button id="logoutBtn" class="hidden">ログアウト</button>
       <p id="userInfo" class="user-info"></p>
@@ -77,6 +87,6 @@
     </section>
   </main>
 
-  <script type="module" src="story.js"></script>
+  <script type="module" src="/story.js"></script>
 </body>
 </html>
