@@ -15,6 +15,7 @@ if (headerRoot) {
         <a href="/shared/">共有メモ</a>
         <a href="/account/">アカウント</a>
         <a href="/terms/">利用規約</a>
+        <a href="/privacy/">プライバシー</a>
       </nav>
     </header>
   `;
