@@ -7,7 +7,7 @@ import {
 } from "./firebase.js";
 
 import {
-  blockIfNotAdmin
+  isAdmin
 } from "./admin.js";
 
 import {
@@ -56,7 +56,7 @@ let episodes = [];
 let selectedWorkId = null;
 let selectedEpisodeId = null;
 
-/* auth */
+/* ---------- auth ---------- */
 
 loginBtn.addEventListener("click", async () => {
   try {
@@ -79,16 +79,7 @@ logoutBtn.addEventListener("click", async () => {
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
 
-  if (user) {
-    blockIfNotAdmin(user);
-
-    loginBtn.classList.add("hidden");
-    logoutBtn.classList.remove("hidden");
-    userInfo.textContent = user.displayName || user.email || "ログイン中";
-    storyStatus.textContent = "ストーリーを保存できます";
-
-    await loadWorks();
-  } else {
+  if (!user) {
     loginBtn.classList.remove("hidden");
     logoutBtn.classList.add("hidden");
     userInfo.textContent = "";
@@ -103,10 +94,24 @@ onAuthStateChanged(auth, async (user) => {
     clearEditor();
 
     storyStatus.textContent = "ログインしてください";
+    return;
   }
+
+  if (!isAdmin(user)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
+    return;
+  }
+
+  loginBtn.classList.add("hidden");
+  logoutBtn.classList.remove("hidden");
+  userInfo.textContent = user.displayName || user.email || "ログイン中";
+  storyStatus.textContent = "ストーリーを保存できます";
+
+  await loadWorks();
 });
 
-/* works */
+/* ---------- works ---------- */
 
 addWorkBtn.addEventListener("click", async () => {
   await createWork();
@@ -115,6 +120,12 @@ addWorkBtn.addEventListener("click", async () => {
 async function createWork() {
   if (!currentUser) {
     alert("先にログインしてください");
+    return;
+  }
+
+  if (!isAdmin(currentUser)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
     return;
   }
 
@@ -192,7 +203,9 @@ function renderWorks() {
 
   works.forEach((work) => {
     const btn = document.createElement("button");
-    btn.className = selectedWorkId === work.id ? "story-item active" : "story-item";
+    btn.className = selectedWorkId === work.id
+      ? "story-item active"
+      : "story-item";
 
     const title = document.createElement("p");
     title.className = "story-item-title";
@@ -218,7 +231,7 @@ function renderWorks() {
   });
 }
 
-/* episodes */
+/* ---------- episodes ---------- */
 
 addEpisodeBtn.addEventListener("click", () => {
   prepareNewEpisode();
@@ -229,6 +242,11 @@ newEpisodeBtn.addEventListener("click", () => {
 });
 
 function prepareNewEpisode() {
+  if (!currentUser) {
+    alert("先にログインしてください");
+    return;
+  }
+
   if (!selectedWorkId) {
     alert("先に作品を選んでください");
     return;
@@ -288,6 +306,7 @@ function renderEpisodes() {
 
   if (!work) {
     selectedWorkInfo.textContent = "作品を選択してください";
+
     const empty = document.createElement("p");
     empty.className = "empty-text";
     empty.textContent = "話がありません";
@@ -307,7 +326,9 @@ function renderEpisodes() {
 
   episodes.forEach((episode) => {
     const btn = document.createElement("button");
-    btn.className = selectedEpisodeId === episode.id ? "story-item active" : "story-item";
+    btn.className = selectedEpisodeId === episode.id
+      ? "story-item active"
+      : "story-item";
 
     const title = document.createElement("p");
     title.className = "story-item-title";
@@ -348,6 +369,12 @@ saveEpisodeBtn.addEventListener("click", async () => {
 async function saveEpisode() {
   if (!currentUser) {
     alert("先にログインしてください");
+    return;
+  }
+
+  if (!isAdmin(currentUser)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
     return;
   }
 
@@ -400,6 +427,7 @@ async function saveEpisode() {
     await loadWorks();
 
     const selected = episodes.find((episode) => episode.id === selectedEpisodeId);
+
     if (selected) {
       selectEpisode(selected);
     }
@@ -416,6 +444,12 @@ deleteEpisodeBtn.addEventListener("click", async () => {
 async function deleteEpisode() {
   if (!currentUser) {
     alert("先にログインしてください");
+    return;
+  }
+
+  if (!isAdmin(currentUser)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
     return;
   }
 
@@ -441,6 +475,7 @@ async function deleteEpisode() {
       await updateDoc(doc(db, "storyWorks", selectedWorkId), {
         updatedAt: serverTimestamp()
       });
+
       await loadWorks();
     }
   } catch (error) {
@@ -449,7 +484,7 @@ async function deleteEpisode() {
   }
 }
 
-/* editor status */
+/* ---------- editor status ---------- */
 
 [
   episodeOrderInput,
@@ -463,7 +498,7 @@ async function deleteEpisode() {
   });
 });
 
-/* helpers */
+/* ---------- helpers ---------- */
 
 function getSelectedWork() {
   return works.find((work) => work.id === selectedWorkId);
