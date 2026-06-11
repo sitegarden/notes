@@ -2792,3 +2792,29 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+/* landing card size fix */
+
+.feature-card,
+.feature-card.accent-home,
+.feature-card.accent-share {
+  grid-column: auto;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (min-width: 1100px) {
+  .feature-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
