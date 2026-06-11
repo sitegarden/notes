@@ -7,14 +7,14 @@ import {
 } from "./firebase.js";
 
 import {
+  isAdmin
+} from "./admin.js";
+
+import {
   signInWithPopup,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-import {
-  blockIfNotAdmin
-} from "./admin.js";
 
 import {
   collection,
@@ -53,7 +53,7 @@ let currentUser = null;
 let musicMemos = [];
 let selectedMusicId = null;
 
-/* auth */
+/* ---------- auth ---------- */
 
 loginBtn.addEventListener("click", async () => {
   try {
@@ -76,15 +76,7 @@ logoutBtn.addEventListener("click", async () => {
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
 
-  if (user) {
-  blockIfNotAdmin(user);
-
-  loginBtn.classList.add("hidden");
-  logoutBtn.classList.remove("hidden");
-  userInfo.textContent = user.displayName || user.email || "ログイン中";
-
-  await loadMusicMemos();
-} else {
+  if (!user) {
     loginBtn.classList.remove("hidden");
     logoutBtn.classList.add("hidden");
     userInfo.textContent = "";
@@ -95,10 +87,25 @@ onAuthStateChanged(auth, async (user) => {
     musicList.innerHTML = "";
     musicStatus.textContent = "ログインしてください";
     renderGenreFilter();
+
+    return;
   }
+
+  if (!isAdmin(user)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
+    return;
+  }
+
+  loginBtn.classList.add("hidden");
+  logoutBtn.classList.remove("hidden");
+  userInfo.textContent = user.displayName || user.email || "ログイン中";
+  musicStatus.textContent = "曲メモを使えます";
+
+  await loadMusicMemos();
 });
 
-/* events */
+/* ---------- events ---------- */
 
 newMusicBtn.addEventListener("click", () => {
   selectedMusicId = null;
@@ -138,7 +145,7 @@ musicGenreFilter.addEventListener("change", () => {
   });
 });
 
-/* load */
+/* ---------- load ---------- */
 
 async function loadMusicMemos() {
   if (!currentUser) return;
@@ -165,11 +172,17 @@ async function loadMusicMemos() {
   renderMusicList();
 }
 
-/* save */
+/* ---------- save ---------- */
 
 async function saveMusicMemo() {
   if (!currentUser) {
     alert("先にログインしてください");
+    return;
+  }
+
+  if (!isAdmin(currentUser)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
     return;
   }
 
@@ -222,11 +235,17 @@ async function saveMusicMemo() {
   }
 }
 
-/* delete */
+/* ---------- delete ---------- */
 
 async function deleteMusicMemo() {
   if (!currentUser) {
     alert("先にログインしてください");
+    return;
+  }
+
+  if (!isAdmin(currentUser)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
     return;
   }
 
@@ -253,7 +272,7 @@ async function deleteMusicMemo() {
   }
 }
 
-/* render */
+/* ---------- render ---------- */
 
 function renderMusicList() {
   musicList.innerHTML = "";
@@ -373,7 +392,7 @@ function renderGenreFilter() {
   }
 }
 
-/* select */
+/* ---------- select ---------- */
 
 function selectMusicMemo(memo) {
   selectedMusicId = memo.id;
@@ -391,7 +410,7 @@ function selectMusicMemo(memo) {
   renderMusicList();
 }
 
-/* helpers */
+/* ---------- helpers ---------- */
 
 function clearMusicForm() {
   musicFormTitle.textContent = "曲メモを追加";
