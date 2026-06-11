@@ -2973,3 +2973,149 @@ button {
     width: 100%;
   }
 }
+
+/* account */
+
+.account-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.account-card {
+  background: #fffaf3;
+  border: 1px solid #e6d9c9;
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 14px 30px rgba(47, 41, 36, 0.08);
+}
+
+.account-subtext {
+  color: #7d7063;
+  margin-top: 6px;
+}
+
+.account-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+  align-items: center;
+}
+
+.account-role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #2f2924;
+  color: #fffaf3;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.account-role-badge.user {
+  background: #e9ddce;
+  color: #3b3128;
+}
+
+.account-role-badge.admin {
+  background: #5b3f8c;
+  color: #fff;
+}
+
+.account-uid-text {
+  color: #8b7c70;
+  font-size: 0.8rem;
+  word-break: break-all;
+}
+
+.account-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.usage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.usage-card {
+  background: #f7efe5;
+  border: 1px solid #e6d9c9;
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.usage-card h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.usage-number {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.usage-limit {
+  margin-top: 8px;
+  color: #7d7063;
+  font-size: 0.9rem;
+}
+
+.usage-bar {
+  overflow: hidden;
+  height: 8px;
+  margin-top: 12px;
+  background: #e6d9c9;
+  border-radius: 999px;
+}
+
+.usage-bar span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: #2f2924;
+  border-radius: 999px;
+}
+
+.limit-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.limit-list div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px;
+  background: #f7efe5;
+  border-radius: 14px;
+}
+
+.limit-list span {
+  color: #7d7063;
+  font-size: 0.9rem;
+}
+
+.account-note {
+  margin-top: 14px;
+  color: #7d7063;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 800px) {
+  .usage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .account-section-head {
+    flex-direction: column;
+  }
+}
