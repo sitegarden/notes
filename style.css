@@ -2911,3 +2911,65 @@ button {
   color: #9b3b3b;
   border-radius: 12px;
 }
+
+/* normal memo layout fix */
+
+.normal-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.normal-layout .folder-panel {
+  width: 100%;
+}
+
+.normal-layout .memo-panel {
+  width: 100%;
+}
+
+.normal-body {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.normal-body .memo-list-wrap {
+  min-width: 0;
+}
+
+.normal-editor-wrap {
+  min-width: 0;
+}
+
+.normal-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px auto;
+  gap: 10px;
+}
+
+.editor-actions {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.editor-actions p {
+  min-width: 100%;
+}
+
+@media (max-width: 900px) {
+  .normal-body {
+    grid-template-columns: 1fr;
+  }
+
+  .normal-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .normal-toolbar input,
+  .normal-toolbar select,
+  .normal-toolbar button {
+    width: 100%;
+  }
+}
