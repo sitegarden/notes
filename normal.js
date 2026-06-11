@@ -637,6 +637,24 @@ function markdownToHtml(markdown = "") {
       return;
     }
 
+    const imageMatch = trimmed.match(/^!\[(.*?)\]\((.*?)\)$/);
+
+if (imageMatch) {
+  closeList();
+
+  const alt = imageMatch[1] || "画像";
+  const src = imageMatch[2] || "";
+
+  html += `
+    <figure class="memo-image-block">
+      <img src="${src}" alt="${alt}">
+      ${alt ? `<figcaption>${alt}</figcaption>` : ""}
+    </figure>
+  `;
+
+  return;
+}
+
     if (trimmed.startsWith("- [ ] ")) {
       closeList();
       html += `<p class="check-line">☐ <span>${formatInline(trimmed.slice(6))}</span></p>`;
@@ -674,6 +692,11 @@ function markdownToHtml(markdown = "") {
 
 function formatInline(text) {
   return text
+    .replace(/!\[(.*?)\]\((.*?)\)/g, `
+      <span class="memo-inline-image">
+        <img src="$2" alt="$1">
+      </span>
+    `)
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     .replace(/`(.*?)`/g, "<code>$1</code>");
 }
