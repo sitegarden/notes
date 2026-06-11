@@ -108,10 +108,10 @@ async function loadHome() {
 
     const quickMemos = await fetchUserCollection("quickMemos");
     sections.push({
-      type: "quick",
-      label: "クイックメモ",
-      url: "quick.html",
-      items: quickMemos.map((item) => ({
+  type: "quick",
+  label: "クイックメモ",
+  url: "/quick/",
+  items: quickMemos.map((item) => ({
         ...item,
         displayTitle: getQuickMemoTitle(item),
         displayText: item.body || "",
