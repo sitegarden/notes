@@ -7,7 +7,7 @@ import {
 } from "./firebase.js";
 
 import {
-  blockIfNotAdmin
+  isAdmin
 } from "./admin.js";
 
 import {
@@ -40,6 +40,7 @@ const peopleFormTitle = document.getElementById("peopleFormTitle");
 const personNameInput = document.getElementById("personNameInput");
 const personNicknameInput = document.getElementById("personNicknameInput");
 const personTypeInput = document.getElementById("personTypeInput");
+const personSubTypeInput = document.getElementById("personSubTypeInput");
 const personRelationInput = document.getElementById("personRelationInput");
 const personMbtiInput = document.getElementById("personMbtiInput");
 const personEnneagramInput = document.getElementById("personEnneagramInput");
@@ -53,13 +54,11 @@ const newPersonBtn = document.getElementById("newPersonBtn");
 const deletePersonBtn = document.getElementById("deletePersonBtn");
 const savePersonBtn = document.getElementById("savePersonBtn");
 
-const personSubTypeInput = document.getElementById("personSubTypeInput");
-
 let currentUser = null;
 let people = [];
 let selectedPersonId = null;
 
-/* auth */
+/* ---------- auth ---------- */
 
 loginBtn.addEventListener("click", async () => {
   try {
@@ -82,16 +81,7 @@ logoutBtn.addEventListener("click", async () => {
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
 
-  if (user) {
-    blockIfNotAdmin(user);
-
-    loginBtn.classList.add("hidden");
-    logoutBtn.classList.remove("hidden");
-    userInfo.textContent = user.displayName || user.email || "ログイン中";
-    peopleStatus.textContent = "人物を保存できます";
-
-    await loadPeople();
-  } else {
+  if (!user) {
     loginBtn.classList.remove("hidden");
     logoutBtn.classList.add("hidden");
     userInfo.textContent = "";
@@ -101,10 +91,25 @@ onAuthStateChanged(auth, async (user) => {
     clearPersonForm();
     peopleList.innerHTML = "";
     peopleStatus.textContent = "ログインしてください";
+
+    return;
   }
+
+  if (!isAdmin(user)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
+    return;
+  }
+
+  loginBtn.classList.add("hidden");
+  logoutBtn.classList.remove("hidden");
+  userInfo.textContent = user.displayName || user.email || "ログイン中";
+  peopleStatus.textContent = "人物を保存できます";
+
+  await loadPeople();
 });
 
-/* events */
+/* ---------- events ---------- */
 
 newPersonBtn.addEventListener("click", () => {
   selectedPersonId = null;
@@ -133,14 +138,14 @@ peopleTypeFilter.addEventListener("change", () => {
   personNameInput,
   personNicknameInput,
   personTypeInput,
+  personSubTypeInput,
   personRelationInput,
   personMbtiInput,
   personEnneagramInput,
   personTagsInput,
   personTraitsInput,
   personMemoInput,
-  personPropsInput,
-  personSubTypeInput,
+  personPropsInput
 ].forEach((input) => {
   input.addEventListener("input", () => {
     peopleStatus.textContent = selectedPersonId
@@ -149,7 +154,7 @@ peopleTypeFilter.addEventListener("change", () => {
   });
 });
 
-/* load */
+/* ---------- load ---------- */
 
 async function loadPeople() {
   if (!currentUser) return;
@@ -175,7 +180,7 @@ async function loadPeople() {
   renderPeople();
 }
 
-/* save */
+/* ---------- save ---------- */
 
 async function savePerson() {
   if (!currentUser) {
@@ -183,9 +188,16 @@ async function savePerson() {
     return;
   }
 
+  if (!isAdmin(currentUser)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
+    return;
+  }
+
   const name = personNameInput.value.trim();
   const nickname = personNicknameInput.value.trim();
   const type = personTypeInput.value;
+  const subType = personSubTypeInput.value.trim();
   const relation = personRelationInput.value.trim();
   const mbti = personMbtiInput.value.trim();
   const enneagram = personEnneagramInput.value.trim();
@@ -193,7 +205,6 @@ async function savePerson() {
   const traits = personTraitsInput.value.trim();
   const memo = personMemoInput.value.trim();
   const props = personPropsInput.value.trim();
-  const subType = personSubTypeInput.value.trim();
 
   if (!name) {
     alert("名前を入力してください");
@@ -204,6 +215,7 @@ async function savePerson() {
     name,
     nickname,
     type,
+    subType,
     relation,
     mbti,
     enneagram,
@@ -211,7 +223,6 @@ async function savePerson() {
     traits,
     memo,
     props,
-    subType,
     updatedAt: serverTimestamp()
   };
 
@@ -237,11 +248,17 @@ async function savePerson() {
   }
 }
 
-/* delete */
+/* ---------- delete ---------- */
 
 async function deletePerson() {
   if (!currentUser) {
     alert("先にログインしてください");
+    return;
+  }
+
+  if (!isAdmin(currentUser)) {
+    alert("このページは管理人専用です");
+    location.href = "/";
     return;
   }
 
@@ -268,7 +285,7 @@ async function deletePerson() {
   }
 }
 
-/* render */
+/* ---------- render ---------- */
 
 function renderPeople() {
   peopleList.innerHTML = "";
@@ -288,14 +305,14 @@ function renderPeople() {
         person.name,
         person.nickname,
         person.type,
+        person.subType,
         person.relation,
         person.mbti,
         person.enneagram,
         person.tags,
         person.traits,
         person.memo,
-        person.props,
-        person.subType
+        person.props
       ]
         .join(" ")
         .toLowerCase();
@@ -329,8 +346,11 @@ function renderPeople() {
     const badges = document.createElement("div");
     badges.className = "person-badges";
 
-    const typeBadge = createBadge(getTypeLabel(person.type));
-    badges.appendChild(typeBadge);
+    badges.appendChild(createBadge(getTypeLabel(person.type)));
+
+    if (person.subType) {
+      badges.appendChild(createBadge(person.subType));
+    }
 
     if (person.mbti) {
       badges.appendChild(createBadge(person.mbti));
@@ -339,10 +359,6 @@ function renderPeople() {
     if (person.enneagram) {
       badges.appendChild(createBadge(person.enneagram));
     }
-
-    if (person.subType) {
-  badges.appendChild(createBadge(person.subType));
-}
 
     splitTags(person.tags).slice(0, 4).forEach((tag) => {
       badges.appendChild(createBadge(tag));
@@ -360,6 +376,8 @@ function renderPeople() {
   });
 }
 
+/* ---------- select ---------- */
+
 function selectPerson(person) {
   selectedPersonId = person.id;
 
@@ -367,6 +385,7 @@ function selectPerson(person) {
   personNameInput.value = person.name || "";
   personNicknameInput.value = person.nickname || "";
   personTypeInput.value = person.type || "real";
+  personSubTypeInput.value = person.subType || "";
   personRelationInput.value = person.relation || "";
   personMbtiInput.value = person.mbti || "";
   personEnneagramInput.value = person.enneagram || "";
@@ -374,20 +393,20 @@ function selectPerson(person) {
   personTraitsInput.value = person.traits || "";
   personMemoInput.value = person.memo || "";
   personPropsInput.value = person.props || "";
-  personSubTypeInput.value = person.subType || "";
 
   peopleStatus.textContent = "編集中";
 
   renderPeople();
 }
 
-/* helpers */
+/* ---------- helpers ---------- */
 
 function clearPersonForm() {
   peopleFormTitle.textContent = "人物を追加";
   personNameInput.value = "";
   personNicknameInput.value = "";
   personTypeInput.value = "real";
+  personSubTypeInput.value = "";
   personRelationInput.value = "";
   personMbtiInput.value = "";
   personEnneagramInput.value = "";
@@ -395,7 +414,6 @@ function clearPersonForm() {
   personTraitsInput.value = "";
   personMemoInput.value = "";
   personPropsInput.value = "";
-  personSubTypeInput.value = "";
 }
 
 function createBadge(text) {
@@ -425,6 +443,7 @@ function makeSubText(person) {
 
   return parts.length ? parts.join(" / ") : "補足なし";
 }
+
 function splitTags(tags = "") {
   return tags
     .split(/[,\s、，]+/)
