@@ -2839,3 +2839,7 @@ button {
   font-size: 12px;
   font-weight: 800;
 }
+
+.error-hero {
+  min-height: calc(100vh - 180px);
+}
