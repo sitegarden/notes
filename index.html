@@ -6,7 +6,10 @@
 
   <title>notia</title>
 
-  <meta name="description" content="notiaは、メモ・日記・タスク・創作ログなどをまとめて保管できるメモサイトです。" />
+  <meta
+    name="description"
+    content="notiaは、メモ・日記・タスク・創作ログなどをまとめて保管できるメモサイトです。"
+  />
 
   <!-- OGP -->
   <meta property="og:title" content="notia" />
@@ -21,18 +24,19 @@
   <meta name="twitter:description" content="メモ・日記・タスク・創作ログなどをまとめて保管できるメモサイト。" />
   <meta name="twitter:image" content="https://notia.jp/ogp.png" />
 
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
 </head>
+
 <body class="landing-page">
   <header class="landing-header">
-    <a href="index.html" class="landing-logo">notia</a>
+    <a href="/" class="landing-logo">notia</a>
 
     <nav class="landing-nav">
       <a href="#features">できること</a>
       <a href="#private">使い方</a>
-      <a href="home.html" class="nav-button">Homeへ</a>
+      <a href="/home/" class="nav-button">Homeへ</a>
     </nav>
   </header>
 
@@ -40,14 +44,19 @@
     <section class="landing-hero">
       <div class="hero-copy">
         <p class="label">PERSONAL NOTE STORAGE</p>
-        <h1>いろいろ保管できる、<br>自分用メモサイト。</h1>
+
+        <h1>
+          いろいろ保管できる、<br>
+          自分用メモサイト。
+        </h1>
+
         <p class="hero-lead">
           notiaは、思いつき・日記・タスク・創作ログ・人物メモなどを、
           自分の使いやすい形でまとめて残せるメモサイトです。
         </p>
 
         <div class="hero-actions">
-          <a href="home.html" class="hero-primary">Homeを開く</a>
+          <a href="/home/" class="hero-primary">Homeを開く</a>
           <a href="/quick/" class="hero-secondary">クイックメモを書く</a>
         </div>
 
@@ -72,10 +81,12 @@
               <strong>Quick Memo</strong>
               <span>思いつきをすぐ保存</span>
             </div>
+
             <div>
-              <strong>Diary</strong>
-              <span>日々の記録を残す</span>
+              <strong>Task</strong>
+              <span>やることを整理</span>
             </div>
+
             <div>
               <strong>Creative Log</strong>
               <span>作品や設定を保管</span>
@@ -92,73 +103,73 @@
         <p>用途ごとに分けて、いろんな記録をまとめて保管できます。</p>
       </div>
 
-      <a href="home.html" class="feature-card accent-home">
+      <div class="feature-grid">
+        <a href="/home/" class="feature-card accent-home">
           <span>🏠</span>
           <h3>Home</h3>
           <p>最近書いたメモや記録をまとめて確認できます。</p>
         </a>
 
-        <a href="shared.html" class="feature-card accent-share">
+        <a href="/shared/" class="feature-card accent-share">
           <span>🔗</span>
           <h3>共有メモ</h3>
           <p>自分が共有したクイックメモを確認・管理できます。</p>
         </a>
 
-      <div class="feature-grid">
         <a href="/quick/" class="feature-card">
           <span>📝</span>
           <h3>クイックメモ</h3>
           <p>タイトルなしで、すぐに書けるシンプルなメモ。</p>
         </a>
 
-        <a href="task.html" class="feature-card">
+        <a href="/task/" class="feature-card">
           <span>✅</span>
           <h3>タスク</h3>
           <p>やることを軽く置いて、完了したらチェック。</p>
         </a>
 
         <div class="feature-card admin-feature locked-feature">
-  <span>📄</span>
-  <h3>通常メモ</h3>
-  <p>Markdown風に書ける、しっかりめのメモ。</p>
-  <small>管理人専用</small>
-</div>
+          <span>📄</span>
+          <h3>通常メモ</h3>
+          <p>Markdown風に書ける、しっかりめのメモ。</p>
+          <small>管理人専用</small>
+        </div>
 
-<div class="feature-card admin-feature locked-feature">
-  <span>📅</span>
-  <h3>日記</h3>
-  <p>カレンダーから日付を選んで記録できます。</p>
-  <small>管理人専用</small>
-</div>
+        <div class="feature-card admin-feature locked-feature">
+          <span>📅</span>
+          <h3>日記</h3>
+          <p>カレンダーから日付を選んで記録できます。</p>
+          <small>管理人専用</small>
+        </div>
 
-<div class="feature-card admin-feature locked-feature">
-  <span>🌙</span>
-  <h3>夢日記</h3>
-  <p>見た夢や印象的だった内容を残せます。</p>
-  <small>管理人専用</small>
-</div>
+        <div class="feature-card admin-feature locked-feature">
+          <span>🌙</span>
+          <h3>夢日記</h3>
+          <p>見た夢や印象的だった内容を残せます。</p>
+          <small>管理人専用</small>
+        </div>
 
-<div class="feature-card admin-feature locked-feature">
-  <span>🎧</span>
-  <h3>曲メモ</h3>
-  <p>曲名・歌詞・和訳・URLなどをまとめて保存。</p>
-  <small>管理人専用</small>
-</div>
+        <div class="feature-card admin-feature locked-feature">
+          <span>🎧</span>
+          <h3>曲メモ</h3>
+          <p>曲名・歌詞・和訳・URLなどをまとめて保存。</p>
+          <small>管理人専用</small>
+        </div>
 
-<div class="feature-card admin-feature locked-feature">
-  <span>📚</span>
-  <h3>ストーリー</h3>
-  <p>作品ごとに話や設定メモを整理できます。</p>
-  <small>管理人専用</small>
-</div>
+        <div class="feature-card admin-feature locked-feature">
+          <span>📚</span>
+          <h3>ストーリー</h3>
+          <p>作品ごとに話や設定メモを整理できます。</p>
+          <small>管理人専用</small>
+        </div>
 
-<div class="feature-card admin-feature locked-feature">
-  <span>👥</span>
-  <h3>人物帳</h3>
-  <p>リアル・キャラ問わず、人物情報を保管できます。</p>
-  <small>管理人専用</small>
-</div>
-        
+        <div class="feature-card admin-feature locked-feature">
+          <span>👥</span>
+          <h3>人物帳</h3>
+          <p>リアル・キャラ問わず、人物情報を保管できます。</p>
+          <small>管理人専用</small>
+        </div>
+      </div>
     </section>
 
     <section id="private" class="landing-section split-section">
