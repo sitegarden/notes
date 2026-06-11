@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>画像メモ | notia</title>
+
+  <meta
+    name="description"
+    content="画像をアップロードしたり、画像URLを登録して整理できるnotiaの画像メモです。"
+  />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+</head>
+
+<body class="image-page">
+  <div id="commonHeader"></div>
+
+  <header class="site-header image-header">
+    <div>
+      <p class="label">IMAGE MEMO</p>
+      <h1>画像メモ</h1>
+      <p class="lead">
+        画像をアップロードしたり、画像URLを登録して、資料・創作・メモをまとめて保管できます。
+      </p>
+    </div>
+
+    <div class="auth-area">
+      <a href="/home/" class="back-link">Homeへ</a>
+      <button id="loginBtn">Googleでログイン</button>
+      <button id="logoutBtn" class="hidden">ログアウト</button>
+      <p id="userInfo" class="user-info"></p>
+    </div>
+  </header>
+
+  <main class="container image-layout">
+    <section class="image-control-panel">
+      <div class="panel-head">
+        <div>
+          <p class="label">ADD IMAGE</p>
+          <h2 id="imageFormTitle">画像を追加</h2>
+        </div>
+
+        <button id="newImageMemoBtn" class="small-btn" type="button">新規</button>
+      </div>
+
+      <div class="image-input-tabs">
+        <button id="uploadModeBtn" class="image-tab active" type="button">アップロード</button>
+        <button id="urlModeBtn" class="image-tab" type="button">URL登録</button>
+      </div>
+
+      <div id="uploadArea" class="image-input-area">
+        <label class="image-upload-box" for="imageFileInput">
+          <span>画像を選択</span>
+          <small>png / jpg / jpeg / webp / gif</small>
+        </label>
+
+        <input
+          id="imageFileInput"
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif"
+          class="hidden"
+        />
+
+        <p id="selectedFileText" class="image-help-text">まだ画像は選択されていません。</p>
+      </div>
+
+      <div id="urlArea" class="image-input-area hidden">
+        <input
+          id="imageUrlInput"
+          type="url"
+          placeholder="画像URLを入力"
+        />
+
+        <p class="image-help-text">
+          例：https://example.com/image.png または /images/sample.png
+        </p>
+      </div>
+
+      <div class="image-preview-box">
+        <img id="imagePreview" alt="画像プレビュー" class="hidden" />
+        <p id="imagePreviewEmpty">画像プレビュー</p>
+      </div>
+
+      <input
+        id="imageTitleInput"
+        type="text"
+        placeholder="タイトル"
+      />
+
+      <input
+        id="imageCategoryInput"
+        type="text"
+        placeholder="カテゴリ 例：資料 / 創作 / アイコン"
+      />
+
+      <input
+        id="imageTagsInput"
+        type="text"
+        placeholder="タグ 例：背景, キャラ, 参考"
+      />
+
+      <textarea
+        id="imageMemoInput"
+        placeholder="画像についてのメモ"
+      ></textarea>
+
+      <label class="checkbox-line">
+        <input id="imageFavoriteInput" type="checkbox" />
+        <span>お気に入りにする</span>
+      </label>
+
+      <div class="editor-actions">
+        <p id="imageStatus">ログインしてください</p>
+        <button id="copyMarkdownBtn" type="button">MDコピー</button>
+        <button id="deleteImageMemoBtn" class="danger-btn" type="button">削除</button>
+        <button id="saveImageMemoBtn" type="button">保存</button>
+      </div>
+    </section>
+
+    <section class="image-list-panel">
+      <div class="panel-head">
+        <div>
+          <p class="label">IMAGE LIST</p>
+          <h2>画像一覧</h2>
+        </div>
+
+        <button id="reloadImageMemosBtn" class="small-btn icon-btn" type="button" aria-label="再読み込み">
+          ↻
+        </button>
+      </div>
+
+      <div class="image-toolbar">
+        <input
+          id="imageSearchInput"
+          type="search"
+          placeholder="タイトル・タグ・メモを検索"
+        />
+
+        <select id="imageCategoryFilter">
+          <option value="all">すべて</option>
+        </select>
+
+        <label class="checkbox-line compact">
+          <input id="favoriteOnlyInput" type="checkbox" />
+          <span>お気に入りのみ</span>
+        </label>
+      </div>
+
+      <div id="imageMemoList" class="image-memo-grid"></div>
+    </section>
+  </main>
+
+  <script type="module" src="/header.js"></script>
+  <script type="module" src="/image.js"></script>
+</body>
+</html>
